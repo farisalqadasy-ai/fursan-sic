@@ -8,13 +8,25 @@
 <style>
 body{
 margin:0;
-font-family:Arial;
-background: linear-gradient(135deg,#000000,#1a1a1a,#000000);
+font-family:Tahoma, Arial;
+background:
+linear-gradient(rgba(0,0,0,0.85),rgba(0,0,0,0.85)),
+url('https://play-lh.googleusercontent.com/TD4I-kti7jFfQKxtKL29cPT2VvOVFz889B-xRI5oJongYzIuS7djOvbIX2sYjczsJBI');
+background-size:cover;
+background-position:center;
 color:white;
 text-align:center;
 }
 
-h1{color:gold;}
+h1{
+color:gold;
+margin-top:25px;
+}
+
+.subtitle{
+color:#d4af37;
+margin-bottom:30px;
+}
 
 .card{
 background:#111;
@@ -23,141 +35,90 @@ border-radius:15px;
 padding:20px;
 margin:20px auto;
 width:90%;
-max-width:400px;
+max-width:420px;
+box-shadow:0 0 15px rgba(255,215,0,0.2);
 }
 
 input{
-width:90%;
-padding:10px;
+width:92%;
+padding:12px;
 margin:8px 0;
 border-radius:8px;
 border:none;
+font-size:15px;
 }
 
 button{
 background:gold;
 color:black;
-padding:12px;
+padding:14px;
 width:95%;
 border:none;
 border-radius:10px;
 font-weight:bold;
+font-size:16px;
 cursor:pointer;
 }
 
-button:hover{background:#d4af37;}
+button:hover{
+background:#d4af37;
+}
+
+.social{
+margin-top:40px;
+padding-bottom:30px;
+}
 
 .social a{
 color:gold;
-margin:8px;
+margin:6px;
 display:inline-block;
-}
-
-#loginBox{
-display:none;
-position:fixed;
-top:60px;
-right:15px;
-background:#000;
-padding:15px;
-border:1px solid gold;
-border-radius:10px;
-width:250px;
+font-size:14px;
+text-decoration:none;
 }
 </style>
 </head>
 
 <body>
 
-<!-- زر تسجيل الدخول في الزاوية -->
-<div style="position:fixed; top:10px; right:15px;">
-<button onclick="toggleLogin()" style="background:gold; padding:8px 12px; border:none; border-radius:8px;">
-تسجيل دخول
-</button>
-</div>
-
-<!-- الشعار -->
-<div style="margin-top:20px;">
-<img src="images/logo-forsan.png" width="200">
-</div>
-
 <h1>وكالة الفرسان للشحن</h1>
-<p style="color:gold;">⚡ شحن فوري • تنفيذ سريع • أمان وثقة 100% 🚀</p>
+<p class="subtitle">⚡ شحن فوري • تنفيذ سريع • أمان وثقة 100% 🚀</p>
 
-<!-- التطبيقات -->
-
+<!-- Xena Lite -->
 <div class="card">
 <h2>Xena Lite</h2>
 <img src="https://play-lh.googleusercontent.com/fglaX6qREt6w8-QKDeAVBpgIWOecb4u2zjFF27fLpcSVoDVtB2rfTueoOIPADFsdJi-w7A8kElNpdwsoqaD4Ug" width="120">
 <input type="text" id="xenaId" placeholder="ادخل ID">
 <input type="number" id="xenaAmount" placeholder="ادخل المبلغ">
-<button onclick="checkLoginBeforeOrder('Xena Lite','xenaId','xenaAmount')">تنفيذ الطلب 🚀</button>
+<button onclick="sendOrder('Xena Lite','xenaId','xenaAmount')">تنفيذ الطلب 🚀</button>
 </div>
 
+<!-- Ahlan -->
 <div class="card">
 <h2>Ahlan</h2>
 <img src="https://play-lh.googleusercontent.com/TD4I-kti7jFfQKxtKL29cPT2VvOVFz889B-xRI5oJongYzIuS7djOvbIX2sYjczsJBI" width="120">
 <input type="text" id="ahlanId" placeholder="ادخل ID">
 <input type="number" id="ahlanAmount" placeholder="ادخل المبلغ">
-<button onclick="checkLoginBeforeOrder('Ahlan','ahlanId','ahlanAmount')">تنفيذ الطلب 🚀</button>
-</div>
-
-<!-- تسجيل الدخول -->
-<div id="loginBox">
-<input type="text" id="newUser" placeholder="اسم المستخدم"><br>
-<input type="password" id="newPass" placeholder="كلمة المرور"><br>
-<button onclick="register()">إنشاء حساب</button>
-<button onclick="login()">دخول</button>
+<button onclick="sendOrder('Ahlan','ahlanId','ahlanAmount')">تنفيذ الطلب 🚀</button>
 </div>
 
 <!-- السوشال -->
 <div class="social">
-<h3>تابعنا</h3>
+<h3 style="color:gold;">تابعنا</h3>
 <a href="https://www.facebook.com/share/1HbPLoHQUw/" target="_blank">فيسبوك</a>
 <a href="https://www.instagram.com/fares_al_qadasy" target="_blank">إنستقرام</a>
 <a href="https://www.tiktok.com/@fares.96955" target="_blank">تيك توك</a>
-<a href="https://www.snapchat.com/add/frslthry19" target="_blank">سناب</a>
+<a href="https://www.snapchat.com/add/frslthry19" target="_blank">سناب شات</a>
 <a href="https://youtube.com/channel/UCIyvikuMJJYMuuTd4MCf0Sw" target="_blank">يوتيوب</a>
 </div>
 
+<!-- صوت -->
 <audio id="clickSound">
 <source src="https://www.soundjay.com/buttons/sounds/button-3.mp3" type="audio/mpeg">
 </audio>
 
 <script>
-
-let selectedApp, selectedId, selectedAmount;
-let isLoggedIn=false;
-
-function toggleLogin(){
-document.getElementById("loginBox").style.display="block";
-}
-
-function register(){
-var u=document.getElementById("newUser").value;
-var p=document.getElementById("newPass").value;
-
-if(u==""||p==""){alert("املأ البيانات");return;}
-
-localStorage.setItem("user",u);
-localStorage.setItem("pass",p);
-alert("تم إنشاء الحساب");
-}
-
-function login(){
-var u=document.getElementById("newUser").value;
-var p=document.getElementById("newPass").value;
-
-if(u==localStorage.getItem("user") && p==localStorage.getItem("pass")){
-alert("تم تسجيل الدخول");
-isLoggedIn=true;
-document.getElementById("loginBox").style.display="none";
-}else{
-alert("بيانات خاطئة");
-}
-}
-
-function checkLoginBeforeOrder(app,idField,amountField){
+function sendOrder(app,idField,amountField){
 
 var id=document.getElementById(idField).value;
 var amount=document.getElementById(amountField).value;
@@ -167,34 +128,15 @@ alert("يرجى إدخال البيانات");
 return;
 }
 
-if(!isLoggedIn){
-alert("يجب تسجيل الدخول أولاً");
-toggleLogin();
-return;
-}
-
-selectedApp=app;
-selectedId=idField;
-selectedAmount=amountField;
-
-sendOrder();
-}
-
-function sendOrder(){
-
-var id=document.getElementById(selectedId).value;
-var amount=document.getElementById(selectedAmount).value;
-
 document.getElementById("clickSound").play();
 
-var msg="طلب شحن\nالتطبيق: "+selectedApp+"\nID: "+id+"\nالمبلغ: "+amount;
+var msg="طلب شحن\nالتطبيق: "+app+"\nID: "+id+"\nالمبلغ: "+amount;
 var url="https://wa.me/967734722459?text="+encodeURIComponent(msg);
 
 setTimeout(function(){
 window.location.href=url;
-},800);
+},700);
 }
-
 </script>
 
 </body>
